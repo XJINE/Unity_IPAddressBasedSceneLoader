@@ -38,7 +38,6 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.37311953, g: 0.38074014, b: 0.3587274, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -215,73 +214,66 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1042690877
-GameObject:
+--- !u!1001 &1797315868
+PrefabInstance:
   m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1042690879}
-  - component: {fileID: 1042690878}
-  m_Layer: 0
-  m_Name: IPAddressBasedSceneLoader
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1042690878
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1042690877}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2c0133a3d2ea7b442b8a855a08a9e6c6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  loadDelayTimeSec: 10
-  loadSceneParameters:
-    m_LoadSceneMode: 0
-    m_LocalPhysicsMode: 0
-  settings:
-  - ipAddress: 192.168.11.15
-    scene:
-      path: Assets/Sample_Load_1.unity
-      guid: 685ad3ea10db1984ca5681eac7839935
-  - ipAddress: 192.168.11.16
-    scene:
-      path: Assets/Sample_Load_3.unity
-      guid: c4da06757594ac54e9fc38afc694d93f
-  - ipAddress: 192.168.11.17
-    scene:
-      path: Assets/Sample_Load_2.unity
-      guid: d4fdbdc0eb930da48ab6181bedb86b0a
-  guiScale: 1.25
-  showSettings: 1
-  showAddresses: 1
---- !u!4 &1042690879
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1042690877}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 899988809155445104, guid: 33d3c38c0163fa840a63dd72f8892b71, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 899988809155445104, guid: 33d3c38c0163fa840a63dd72f8892b71, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 899988809155445104, guid: 33d3c38c0163fa840a63dd72f8892b71, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 899988809155445104, guid: 33d3c38c0163fa840a63dd72f8892b71, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 899988809155445104, guid: 33d3c38c0163fa840a63dd72f8892b71, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 899988809155445104, guid: 33d3c38c0163fa840a63dd72f8892b71, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 899988809155445104, guid: 33d3c38c0163fa840a63dd72f8892b71, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 899988809155445104, guid: 33d3c38c0163fa840a63dd72f8892b71, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 899988809155445104, guid: 33d3c38c0163fa840a63dd72f8892b71, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 899988809155445104, guid: 33d3c38c0163fa840a63dd72f8892b71, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2390419088539617869, guid: 33d3c38c0163fa840a63dd72f8892b71, type: 3}
+      propertyPath: m_Name
+      value: IPAddressBasedSceneLoader
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 33d3c38c0163fa840a63dd72f8892b71, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 963194228}
-  - {fileID: 1042690879}
+  - {fileID: 1797315868}

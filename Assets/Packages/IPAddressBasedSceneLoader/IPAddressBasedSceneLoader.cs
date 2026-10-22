@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -13,93 +12,35 @@ public class IPAddressBasedSceneLoader : SingletonMonoBehaviour<IPAddressBasedSc
         public SceneObject scene;
     }
 
-    [SerializeField] private float               loadDelayTimeSec = 10f;
-    [SerializeField] private LoadSceneParameters loadSceneParameters;
-    [SerializeField] private Setting[]           settings;
+    [field: SerializeField] public float               LoadDelayTimeSec    { get; private set; } = 10f;
+    [field: SerializeField] public LoadSceneParameters LoadSceneParameters { get; private set; }
+    [field: SerializeField] public Setting[]           Settings            { get; private set; }
+                            public Setting             LoadSetting         { get; private set; }
+                            public bool                IsLoaded            { get; private set; }
+                            public float               RemainingTimeSec => _loadTimeSec - Time.timeSinceLevelLoad;
 
-    [SerializeField] private float guiScale      = 1.25f;
-    [SerializeField] private bool  showSettings  = true;
-    [SerializeField] private bool  showAddresses = true;
-
-    private Setting _loadSetting;
-    private float   _loadTimeSec;
-    private bool    _isLoaded;
-
-    public IReadOnlyList<Setting> Settings => settings;
-
-    private float RemainingTimeSec => _loadTimeSec - Time.timeSinceLevelLoad;
+    private float _loadTimeSec;
 
     private void Start()
     {
-        _loadSetting = settings.FirstOrDefault(setting => IPAddressUtil.HasAddress(setting.ipAddress));
+        LoadSetting = Settings.FirstOrDefault(setting => IPAddressUtil.HasAddress(setting.ipAddress));
 
-        if (_loadSetting == null)
+        if (LoadSetting == null)
         {
             return;
         }
 
-        _loadTimeSec = Time.timeSinceLevelLoad + loadDelayTimeSec;
+        _loadTimeSec = Time.timeSinceLevelLoad + LoadDelayTimeSec;
 
         StartCoroutine(LoadSceneAfterDelay());
     }
 
     private IEnumerator LoadSceneAfterDelay()
     {
-        yield return new WaitForSeconds(loadDelayTimeSec);
+        yield return new WaitForSeconds(LoadDelayTimeSec);
 
-        _isLoaded = true;
-        SceneManager.LoadScene(_loadSetting.scene.Path, loadSceneParameters);
-    }
+        IsLoaded = true;
 
-    private void OnGUI()
-    {
-        GUI.matrix *= Matrix4x4.Scale(Vector3.one * guiScale);
-
-        GUILayout.BeginArea(new Rect(10, 10, Screen.width - 10, Screen.height - 10));
-        GUILayout.Label(nameof(IPAddressBasedSceneLoader));
-
-        if (_loadSetting == null)
-        {
-            GUILayout.Label("Setting Not Found.");
-        }
-        else if (_isLoaded)
-        {
-            GUILayout.Label(_loadSetting.ipAddress + " : " + _loadSetting.scene.Path);
-            GUILayout.Label("Loaded.");
-        }
-        else
-        {
-            var remaining = RemainingTimeSec.ToString("F1");
-            GUILayout.Label(_loadSetting.ipAddress + " : " + _loadSetting.scene.Path);
-            GUILayout.Label("This will be loading after " + remaining + " seconds.");
-        }
-
-        if (showSettings)
-        {
-            GUILayout.Label("Settings");
-            if(settings.Length == 0)
-            {
-                GUILayout.Label(" - No Definitions");
-            }
-            foreach (var setting in settings)
-            {
-                GUILayout.Label(" - " + setting.ipAddress + " : " + setting.scene.Path);
-            }
-        }
-
-        if (showAddresses)
-        {
-            GUILayout.Label("Addresses");
-            if(IPAddressUtil.LocalAddresses.Length == 0)
-            {
-                GUILayout.Label(" - No Definitions");
-            }
-            foreach (var address in IPAddressUtil.LocalAddresses)
-            {
-                GUILayout.Label(" - " + address);
-            }
-        }
-
-        GUILayout.EndArea();
+        SceneManager.LoadScene(LoadSetting.scene.Path, LoadSceneParameters);
     }
 }

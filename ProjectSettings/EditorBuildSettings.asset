@@ -12,9 +12,9 @@ EditorBuildSettings:
     path: Assets/Sample_Load_1.unity
     guid: 685ad3ea10db1984ca5681eac7839935
   - enabled: 1
-    path: Assets/Sample_Load_3.unity
-    guid: c4da06757594ac54e9fc38afc694d93f
-  - enabled: 1
     path: Assets/Sample_Load_2.unity
     guid: d4fdbdc0eb930da48ab6181bedb86b0a
+  - enabled: 1
+    path: Assets/Sample_Load_3.unity
+    guid: c4da06757594ac54e9fc38afc694d93f
   m_configObjects: {}

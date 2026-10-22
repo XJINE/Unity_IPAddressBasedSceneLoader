@@ -6,28 +6,31 @@ using UnityEngine;
 [CustomPropertyDrawer(typeof(IPAddressBasedSceneLoader.Setting))]
 public class IPAddressBasedSceneLoaderSettingDrawer : PropertyDrawer
 {
+    private const float LabelWidth    = 55f;
+    private const float ColumnSpacing = 10f;
+
+    private static readonly GUIContent AddressLabel = new GUIContent("Address");
+    private static readonly GUIContent SceneLabel   = new GUIContent("Scene");
+
     public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
     {
         EditorGUI.BeginProperty(position, label, property);
 
-        var height = position.height;
-        var width  = (position.width - 20) / 4 ;
-
-        var addressLabelRect = new Rect(position.xMin,                  position.y, width, height);
-        var addressFieldRect = new Rect(position.xMin + width * 1,      position.y, width, height);
-        var sceneLabelRect   = new Rect(position.xMin + width * 2 + 10, position.y, width, height);
-        var sceneFieldRect   = new Rect(position.xMin + width * 3 + 10, position.y, width, height);
-
         var prevIndentLevel = EditorGUI.indentLevel;
+        var prevLabelWidth  = EditorGUIUtility.labelWidth;
 
-        EditorGUI.indentLevel = 0;
+        EditorGUI.indentLevel       = 0;
+        EditorGUIUtility.labelWidth = LabelWidth;
 
-        EditorGUI.LabelField    (addressLabelRect, "Address");
-        EditorGUI.PropertyField (addressFieldRect, property.FindPropertyRelative(nameof(IPAddressBasedSceneLoader.Setting.ipAddress)), GUIContent.none);
-        EditorGUI.LabelField    (sceneLabelRect, "Scene");
-        EditorGUI.PropertyField (sceneFieldRect, property.FindPropertyRelative(nameof(IPAddressBasedSceneLoader.Setting.scene)), GUIContent.none);
+        var columnWidth = (position.width - ColumnSpacing) / 2f;
+        var addressRect = new Rect(position.x,                               position.y, columnWidth, position.height);
+        var sceneRect   = new Rect(addressRect.xMax + ColumnSpacing, position.y, columnWidth, position.height);
 
-        EditorGUI.indentLevel = prevIndentLevel;
+        EditorGUI.PropertyField(addressRect, property.FindPropertyRelative(nameof(IPAddressBasedSceneLoader.Setting.ipAddress)), AddressLabel);
+        EditorGUI.PropertyField(sceneRect,   property.FindPropertyRelative(nameof(IPAddressBasedSceneLoader.Setting.scene)),     SceneLabel);
+
+        EditorGUIUtility.labelWidth = prevLabelWidth;
+        EditorGUI.indentLevel       = prevIndentLevel;
 
         EditorGUI.EndProperty();
     }
