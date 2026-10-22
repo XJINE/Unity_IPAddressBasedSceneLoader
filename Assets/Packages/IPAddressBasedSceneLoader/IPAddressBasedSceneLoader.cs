@@ -1,8 +1,10 @@
+using UnityEngine;
+using UnityEngine.SceneManagement;
+#if UNITY_EDITOR
 using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
-using UnityEngine;
-using UnityEngine.SceneManagement;
+#endif
 
 public class IPAddressBasedSceneLoader : SingletonMonoBehaviour<IPAddressBasedSceneLoader>
 {
@@ -12,8 +14,6 @@ public class IPAddressBasedSceneLoader : SingletonMonoBehaviour<IPAddressBasedSc
         public string      ipAddress;
         public SceneObject scene;
     }
-
-    #region Field
 
     [SerializeField] private float               loadDelayTimeSec = 10f;
     [SerializeField] private LoadSceneParameters loadSceneParameters;
@@ -25,10 +25,7 @@ public class IPAddressBasedSceneLoader : SingletonMonoBehaviour<IPAddressBasedSc
 
     private float    _startTimeSec = -1;
     private Setting  _loadSetting  = null;
-
-    #endregion Field
-
-    #region Method
+    private bool     _isLoaded     = false;
 
     private void Start()
     {
@@ -45,8 +42,14 @@ public class IPAddressBasedSceneLoader : SingletonMonoBehaviour<IPAddressBasedSc
 
     private void Update()
     {
-        if(0 <= _startTimeSec && loadDelayTimeSec < Time.timeSinceLevelLoad - _startTimeSec)
+        if (_isLoaded || _startTimeSec < 0)
         {
+            return;
+        }
+
+        if (loadDelayTimeSec < Time.timeSinceLevelLoad - _startTimeSec)
+        {
+            _isLoaded = true;
             SceneManager.LoadScene(_loadSetting.scene.Path, loadSceneParameters);
         }
     }
@@ -61,6 +64,11 @@ public class IPAddressBasedSceneLoader : SingletonMonoBehaviour<IPAddressBasedSc
         if (_loadSetting == null)
         {
             GUILayout.Label("Setting Not Found.");
+        }
+        else if (_isLoaded)
+        {
+            GUILayout.Label(_loadSetting.ipAddress + " : " + _loadSetting.scene.Path);
+            GUILayout.Label("Loaded.");
         }
         else
         {
@@ -97,8 +105,6 @@ public class IPAddressBasedSceneLoader : SingletonMonoBehaviour<IPAddressBasedSc
 
         GUILayout.EndArea();
     }
-
-    #endregion Method
 
     #if UNITY_EDITOR
 
@@ -141,23 +147,23 @@ public class IPAddressBasedSceneLoader : SingletonMonoBehaviour<IPAddressBasedSc
 
             if (GUILayout.Button("Setup into Build Settings"))
             {
-                var scenesToSetup = new List<EditorBuildSettingsScene>();
+                var loaderScenePath = sceneLoader.gameObject.scene.path;
 
-                foreach (var setting in sceneLoader.settings)
+                if (string.IsNullOrEmpty(loaderScenePath))
                 {
-                    if(setting.scene == null || scenesToSetup.Any(scene => scene.path == setting.scene.Path))
-                    {
-                        continue;
-                    }
-
-                    scenesToSetup.Add(new EditorBuildSettingsScene(setting.scene.Path, true));
+                    Debug.LogWarning("Save the scene that contains " + nameof(IPAddressBasedSceneLoader) + " before setting up Build Settings.");
                 }
+                else
+                {
+                    var scenePaths = new List<string> { loaderScenePath };
+                        scenePaths.AddRange(sceneLoader.settings
+                                  .Select(setting => setting.scene?.Path)
+                                  .Where(path => !string.IsNullOrEmpty(path)));
 
-                scenesToSetup.Insert(0, new EditorBuildSettingsScene(SceneManager.GetActiveScene().path, true));
-
-                EditorBuildSettings.scenes = scenesToSetup.ToArray();
-
-                EditorUtility.SetDirty(target);
+                    EditorBuildSettings.scenes = scenePaths.Distinct()
+                                                           .Select(path => new EditorBuildSettingsScene(path, true))
+                                                           .ToArray();
+                }
             }
 
             base.OnInspectorGUI();
