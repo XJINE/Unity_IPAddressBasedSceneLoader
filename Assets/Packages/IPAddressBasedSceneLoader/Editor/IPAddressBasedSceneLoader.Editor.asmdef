@@ -1,0 +1,20 @@
+{
+    "name": "IPAddressBasedSceneLoader.Editor",
+    "rootNamespace": "",
+    "references": [
+        "GUID:eac31ddd660150545a63a5948e09242d",
+        "GUID:7822ba1e8785f9a48b4b2f9333595c83",
+        "GUID:43dd3f0c7ecda0f40b03f362c16f8cce"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
