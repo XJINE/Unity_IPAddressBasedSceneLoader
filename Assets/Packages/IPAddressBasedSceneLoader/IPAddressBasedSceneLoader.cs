@@ -1,8 +1,9 @@
+using System.Collections;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 #if UNITY_EDITOR
 using System.Collections.Generic;
-using System.Linq;
 using UnityEditor;
 #endif
 
@@ -23,35 +24,32 @@ public class IPAddressBasedSceneLoader : SingletonMonoBehaviour<IPAddressBasedSc
     [SerializeField] private bool  showSettings  = true;
     [SerializeField] private bool  showAddresses = true;
 
-    private float    _startTimeSec = -1;
-    private Setting  _loadSetting  = null;
-    private bool     _isLoaded     = false;
+    private Setting _loadSetting;
+    private float   _loadTimeSec;
+    private bool    _isLoaded;
+
+    private float RemainingTimeSec => _loadTimeSec - Time.timeSinceLevelLoad;
 
     private void Start()
     {
-        foreach (var setting in settings)
-        {
-            if (IPAddressUtil.HasAddress(setting.ipAddress))
-            {
-                _startTimeSec = Time.timeSinceLevelLoad;
-                _loadSetting  = setting;
-                break;
-            }
-        }
-    }
+        _loadSetting = settings.FirstOrDefault(setting => IPAddressUtil.HasAddress(setting.ipAddress));
 
-    private void Update()
-    {
-        if (_isLoaded || _startTimeSec < 0)
+        if (_loadSetting == null)
         {
             return;
         }
 
-        if (loadDelayTimeSec < Time.timeSinceLevelLoad - _startTimeSec)
-        {
-            _isLoaded = true;
-            SceneManager.LoadScene(_loadSetting.scene.Path, loadSceneParameters);
-        }
+        _loadTimeSec = Time.timeSinceLevelLoad + loadDelayTimeSec;
+
+        StartCoroutine(LoadSceneAfterDelay());
+    }
+
+    private IEnumerator LoadSceneAfterDelay()
+    {
+        yield return new WaitForSeconds(loadDelayTimeSec);
+
+        _isLoaded = true;
+        SceneManager.LoadScene(_loadSetting.scene.Path, loadSceneParameters);
     }
 
     private void OnGUI()
@@ -72,7 +70,7 @@ public class IPAddressBasedSceneLoader : SingletonMonoBehaviour<IPAddressBasedSc
         }
         else
         {
-            var remaining = (loadDelayTimeSec - (Time.timeSinceLevelLoad - _startTimeSec)).ToString("F1");
+            var remaining = RemainingTimeSec.ToString("F1");
             GUILayout.Label(_loadSetting.ipAddress + " : " + _loadSetting.scene.Path);
             GUILayout.Label("This will be loading after " + remaining + " seconds.");
         }
